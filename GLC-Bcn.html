@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Información de Usuario por NFC</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        #user-info {
+            margin-top: 20px;
+        }
+        img {
+            max-width: 300px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Bienvenido</h1>
+    <p id="instruction">Escanee el NFC para ver su información.</p>
+    <div id="user-info">
+        <h2 id="name"></h2>
+        <img id="profile-image" src="" alt="Imagen de perfil">
+        <p id="additional-info"></p>
+    </div>
+    
+    <script>
+        async function fetchUserInfo(nfcId) {
+            try {
+                const response = await fetch(`/user-info?nfcId=${nfcId}`);
+                if (!response.ok) throw new Error("Error en la obtención de datos");
+                const data = await response.json();
+
+                document.getElementById("name").textContent = data.name;
+                document.getElementById("profile-image").src = data.imageUrl;
+                document.getElementById("additional-info").textContent = data.info;
+            } catch (error) {
+                console.error("Error al obtener la información del usuario:", error);
+                document.getElementById("instruction").textContent = "No se pudo obtener la información.";
+            }
+        }
+
+        // Simulador de llamada NFC (Para pruebas locales)
+        const simulatedNfcId = "NFC12345"; // Cambia este ID para probar con diferentes NFCs
+        fetchUserInfo(simulatedNfcId);
+    </script>
+</body>
+</html>
